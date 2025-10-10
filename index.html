@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>London Expos & Exhibitions — Rolling 3 Months</title>
+  <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.js"></script>
+  <style>
+    :root{
+      --bg:#0f172a; --text:#ffffff; --muted:#94a3b8; --border:#e5e7eb;
+      --s1:#0ea5e9; /* Eng & Mfg (calm blues/greens) */
+      --s2:#6d28d9; /* Defence/Cyber/Sec */
+      --s3:#16a34a; /* Energy */
+      --s4:#2563eb; /* Public Sector */
+      --s5:#14b8a6; /* Fintech */
+      --s6:#10b981; /* Life Sciences */
+      --s7:#f59e0b; /* Project Mgmt */
+    }
+    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;margin:0}
+    header{padding:16px 20px;background:var(--bg);color:var(--text)}
+    h1{margin:0 0 6px;font-size:20px}
+    .sub{opacity:.8;font-size:14px}
+    .toolbar{display:flex;gap:12px;align-items:center;padding:12px 20px;flex-wrap:wrap;border-bottom:1px solid var(--border)}
+    .badge{display:inline-flex;align-items:center;gap:8px;padding:6px 10px;border:1px solid #d1d5db;border-radius:999px;cursor:pointer;user-select:none}
+    .badge input{margin:0}
+    #calendar{max-width:1100px;margin:10px auto;padding:0 16px 24px}
+    .searchbox{padding:8px 10px;border:1px solid #d1d5db;border-radius:8px;min-width:260px}
+    .legend{display:none} /* requested: hide legend */
+    .swatch{display:inline-block;width:10px;height:10px;border-radius:2px}
+    .toggle{display:inline-flex;align-items:center;gap:8px;padding:6px 10px;border:1px solid #d1d5db;border-radius:999px}
+    footer{padding:12px 20px;border-top:1px solid var(--border);color:#6b7280;font-size:12px}
+  </style>
+</head>
+<body>
+  <header>
+    <h1>London Expos & Exhibitions — Rolling 3 Months</h1>
+    <div class="sub">Filters: Engineering & Manufacturing • Defence, Cyber & Security • Energy • Public Sector • Fintech • Life Sciences • Project Management</div>
+  </header>
+
+  <div class="toolbar" id="toolbar">
+    <input id="search" class="searchbox" type="search" placeholder="Search title, venue or exhibitors…"/>
+    <label class="toggle"><input type="checkbox" id="freeOnly"/> Free events only</label>
+    <div id="sectorChecks" style="display:flex;flex-wrap:wrap;gap:12px;margin-left:auto"></div>
+  </div>
+
+  <div id="calendar"></div>
+
+  <footer>Built with <a href="https://fullcalendar.io/" target="_blank" rel="noopener">FullCalendar</a>. Share this page, or subscribe to the Outlook feed (London_Expos.ics).</footer>
+
+  <script>
+    /* The build script overwrites this array with the next 3 months of events */
+    const allEvents = [];
+
+    const sectorColors = {
+      "Engineering & Manufacturing":"var(--s1)",
+      "Defence, Cyber & Security":"var(--s2)",
+      "Energy":"var(--s3)",
+      "Public Sector":"var(--s4)",
+      "Fintech":"var(--s5)",
+      "Life Sciences":"var(--s6)",
+      "Project Management":"var(--s7)"
+    };
+    const filters = Object.keys(sectorColors);
+
+    const toolbar = document.getElementById('toolbar');
+    const searchBox = document.getElementById('search');
+    const freeOnly = document.getElementById('freeOnly');
+    const sectorWrap = document.getElementById('sectorChecks');
+
+    const sectorChecks = [];
+    filters.forEach(name=>{
+      const label=document.createElement('label'); label.className='badge';
+      const input=document.createElement('input'); input.type='checkbox'; input.value=name; input.checked=true;
+      const sw=document.createElement('span'); sw.className='swatch'; sw.style.background=sectorColors[name]||'#9ca3af';
+      const text=document.createTextNode(name);
+      label.appendChild(input); label.appendChild(sw); label.appendChild(text);
+      sectorWrap.appendChild(label); sectorChecks.push(input);
+    });
+
+    function exhibitorsText(e){ return Array.isArray(e.exhibitors) ? e.exhibitors.join(' ') : (e.exhibitors||''); }
+    function pickColor(sectors){ for(const s of (sectors||[])){ if(sectorColors[s]) return sectorColors[s]; } return '#9ca3af'; }
+
+    function currentFilters(){
+      return {
+        sectors: new Set(sectorChecks.filter(c=>c.checked).map(c=>c.value)),
+        q: (searchBox.value||'').toLowerCase().trim(),
+        freeOnly: freeOnly.checked
+      };
+    }
+
+    function filterEvents(){
+      const {sectors, q, freeOnly} = currentFilters();
+      return allEvents.filter(e=>{
+        const sectorOK = (e.sector||[]).some(s=>sectors.has(s));
+        if(!sectorOK) return false;
+        if(freeOnly && !e.free) return false;
+        if(!q) return true;
+        const hay=(e.title+' '+(e.venue||'')+' '+(e.url||'')+' '+exhibitorsText(e)).toLowerCase();
+        return hay.includes(q);
+      }).map(e=>{
+        const color = pickColor(e.sector);
+        return {
+          title: e.title,
+          start: e.start,
+          end: e.end,
+          url: e.url,
+          backgroundColor: color,
+          borderColor: color,
+          textColor: '#ffffff',
+          extendedProps: {
+            venue: e.venue,
+            sector: e.sector,
+            exhibitors: e.exhibitors||[],
+            free: !!e.free
+          }
+        }
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', function(){
+      const calendarEl = document.getElementById('calendar');
+      const calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: 'dayGridMonth',
+        headerToolbar: { left:'prev,next today', center:'title', right:'dayGridMonth,timeGridWeek,timeGridDay,listMonth' },
+        height: 'auto',
+        nowIndicator: true,
+        eventTimeFormat: { hour:'2-digit', minute:'2-digit' },
+        events: filterEvents(),
+        eventClick: function(info){
+          if(info.event.url){ info.jsEvent.preventDefault(); window.open(info.event.url,'_blank'); }
+        },
+        eventDidMount: function(info){
+          const ep = info.event.extendedProps;
+          const parts = [];
+          if(ep.venue) parts.push(ep.venue);
+          if(ep.sector && ep.sector.length) parts.push('Sectors: '+ep.sector.join(', '));
+          parts.push('Free: ' + (ep.free ? 'Yes' : 'No'));
+          if(ep.exhibitors && ep.exhibitors.length) parts.push('Exhibitors: '+ep.exhibitors.slice(0,6).join(', ')+(ep.exhibitors.length>6?'…':''));
+          info.el.title = info.event.title + (parts.length?' — '+parts.join(' | '):'');
+        }
+      });
+      calendar.render();
+
+      function refresh(){ calendar.removeAllEvents(); calendar.addEventSource(filterEvents()); }
+      sectorChecks.forEach(c=>c.addEventListener('change', refresh));
+      searchBox.addEventListener('input', refresh);
+      freeOnly.addEventListener('change', refresh);
+    });
+  </script>
+</body>
+</html>
