@@ -1,0 +1,23 @@
+- match: "MRO Europe"
+  url: "https://exhibitor.mroeurope.aviationweek.com/eu25/Public/exhibitors.aspx"
+  selector: ".exhibitor-list .name"
+  paginate:
+    click: ".load-more"
+    max_clicks: 20
+  wait_for: ".exhibitor-list"
+
+- match: "EMEX — Energy Management"
+  url: "https://www.emexlondon.com/exhibitors/"
+  selector: "a.exhibitor-card__title, .exhibitor-name"
+  paginate:
+    click: "button[aria-label='Load more']"
+    max_clicks: 30
+  wait_for: ".exhibitor-card"
+
+- match: "FinTech Connect"
+  url: "https://www.fintechconnect.com/exhibitors"
+  selector: ".exhibitor-name, [data-test='companyName']"
+  paginate:
+    click: "button:has-text('Load more')"
+    max_clicks: 20
+  wait_for: ".exhibitor"
