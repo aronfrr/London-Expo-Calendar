@@ -1,0 +1,62 @@
+[
+  {
+    "title": "DTX + UCX London",
+    "start": "2025-10-01T09:30:00+01:00",
+    "end":   "2025-10-02T16:30:00+01:00",
+    "url": "https://www.excel.london/visitor/whats-on/dtx-ucx-london-2025",
+    "venue": "ExCeL London",
+    "sector": ["Defence, Cyber & Security","Public Sector","Fintech","Project Management"],
+    "exhibitors": [],
+    "free": false
+  },
+  {
+    "title": "New Scientist Live",
+    "start": "2025-10-18T10:00:00+01:00",
+    "end":   "2025-10-20T15:00:00+01:00",
+    "url": "https://live.newscientist.com/",
+    "venue": "ExCeL London",
+    "sector": ["Life Sciences","Public Sector"],
+    "exhibitors": [],
+    "free": false
+  },
+  {
+    "title": "MRO Europe — Conference & Exhibition",
+    "start": "2025-10-14T09:00:00+01:00",
+    "end":   "2025-10-16T17:00:00+01:00",
+    "url": "https://mroeurope.aviationweek.com/en/home.html",
+    "venue": "ExCeL London",
+    "sector": ["Engineering & Manufacturing","Defence, Cyber & Security"],
+    "exhibitors": ["AAR CORP.","Chromalloy","Collins Aerospace"],
+    "free": false
+  },
+  {
+    "title": "London Build Expo",
+    "start": "2025-11-19T09:30:00+00:00",
+    "end":   "2025-11-20T17:00:00+00:00",
+    "url": "https://www.londonbuildexpo.com/",
+    "venue": "Olympia London",
+    "sector": ["Engineering & Manufacturing","Energy"],
+    "exhibitors": [],
+    "free": true
+  },
+  {
+    "title": "EMEX — Energy Management & Smart Buildings",
+    "start": "2025-11-19T09:00:00+00:00",
+    "end":   "2025-11-20T17:00:00+00:00",
+    "url": "https://www.emexlondon.com/",
+    "venue": "ExCeL London",
+    "sector": ["Energy","Engineering & Manufacturing"],
+    "exhibitors": ["Siemens","Schneider Electric","ABB"],
+    "free": false
+  },
+  {
+    "title": "FinTech Connect",
+    "start": "2025-12-02T09:30:00+00:00",
+    "end":   "2025-12-03T17:30:00+00:00",
+    "url": "https://www.fintechconnect.com/",
+    "venue": "ExCeL London",
+    "sector": ["Fintech"],
+    "exhibitors": ["Clear Bank","Codat","Aiven UK"],
+    "free": false
+  }
+]
