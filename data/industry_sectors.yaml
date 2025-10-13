@@ -1,0 +1,64 @@
+- name: "Engineering & Manufacturing"
+  search: "engineering OR manufacturing OR aerospace OR automotive"
+  keywords:
+    - "manufactur"
+    - "engineer"
+    - "aerospace"
+    - "aviation"
+    - "automotive"
+    - "packaging"
+
+- name: "Defence, Cyber & Security"
+  search: "defence OR defense OR cyber OR security OR infosec"
+  keywords:
+    - "defence"
+    - "defense"
+    - "cyber"
+    - "security"
+    - "infosec"
+    - "risk"
+
+- name: "Energy"
+  search: "energy OR smart buildings OR sustainability OR net zero"
+  keywords:
+    - "energy"
+    - "smart building"
+    - "sustainab"
+    - "net zero"
+
+- name: "Public Sector"
+  search: "public sector OR government OR NHS OR education"
+  keywords:
+    - "public sector"
+    - "government"
+    - "nhs"
+    - "education"
+
+- name: "Fintech"
+  search: "fintech OR banking OR payments OR blockchain OR crypto OR DeFi"
+  keywords:
+    - "fintech"
+    - "finance"
+    - "bank"
+    - "payment"
+    - "blockchain"
+    - "crypto"
+    - "defi"
+
+- name: "Life Sciences"
+  search: "life sciences OR biotech OR pharma OR medical"
+  keywords:
+    - "life science"
+    - "biotech"
+    - "pharma"
+    - "medical"
+    - "dental"
+    - "vet"
+
+- name: "Project Management"
+  search: "project management OR PMO OR programme OR portfolio"
+  keywords:
+    - "project management"
+    - "pmo"
+    - "programme"
+    - "portfolio"

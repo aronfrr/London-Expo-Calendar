@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-import os, re, json, time, requests
+import os, re, json, time, requests, yaml
 from datetime import datetime, timedelta, timezone
 from bs4 import BeautifulSoup
 
@@ -12,15 +12,85 @@ WINDOW_DAYS = 84   # 12 weeks
 HEADERS = {"User-Agent": "Mozilla/5.0 (London-Expos-Updater)"}
 LON = timezone.utc
 
-SECTOR_QUERIES = [
-    "engineering OR manufacturing OR aerospace OR automotive",
-    "defence OR defense OR cyber OR security OR infosec",
-    "energy OR smart buildings OR sustainability OR net zero",
-    "public sector OR government OR NHS OR education",
-    "fintech OR banking OR payments OR blockchain OR crypto OR DeFi",
-    "life sciences OR biotech OR pharma OR medical",
-    "project management OR PMO OR programme OR portfolio",
+SECTORS_FILE = os.path.join("data", "industry_sectors.yaml")
+DEFAULT_SECTORS = [
+    {
+        "name": "Engineering & Manufacturing",
+        "search": "engineering OR manufacturing OR aerospace OR automotive",
+        "keywords": ["manufactur", "engineer", "aerospace", "aviation", "automotive", "packaging"],
+    },
+    {
+        "name": "Defence, Cyber & Security",
+        "search": "defence OR defense OR cyber OR security OR infosec",
+        "keywords": ["defence", "defense", "cyber", "security", "infosec", "risk"],
+    },
+    {
+        "name": "Energy",
+        "search": "energy OR smart buildings OR sustainability OR net zero",
+        "keywords": ["energy", "smart building", "sustainab", "net zero"],
+    },
+    {
+        "name": "Public Sector",
+        "search": "public sector OR government OR NHS OR education",
+        "keywords": ["public sector", "government", "nhs", "education"],
+    },
+    {
+        "name": "Fintech",
+        "search": "fintech OR banking OR payments OR blockchain OR crypto OR DeFi",
+        "keywords": ["fintech", "finance", "bank", "payment", "blockchain", "crypto", "defi"],
+    },
+    {
+        "name": "Life Sciences",
+        "search": "life sciences OR biotech OR pharma OR medical",
+        "keywords": ["life science", "biotech", "pharma", "medical", "dental", "vet"],
+    },
+    {
+        "name": "Project Management",
+        "search": "project management OR PMO OR programme OR portfolio",
+        "keywords": ["project management", "pmo", "programme", "portfolio"],
+    },
 ]
+
+
+def load_sector_definitions():
+    try:
+        with open(SECTORS_FILE, "r", encoding="utf-8") as f:
+            data = yaml.safe_load(f) or []
+    except FileNotFoundError:
+        return DEFAULT_SECTORS
+    except Exception as ex:
+        print(f"[warn] Failed to read {SECTORS_FILE}: {ex}")
+        return DEFAULT_SECTORS
+
+    sectors = []
+    for entry in data:
+        if isinstance(entry, str):
+            sectors.append({"name": entry, "search": entry, "keywords": [entry.lower()]})
+            continue
+        if not isinstance(entry, dict):
+            continue
+        name = (entry.get("name") or "").strip()
+        search = (entry.get("search") or entry.get("query") or "").strip()
+        keywords = entry.get("keywords") or entry.get("tags") or []
+        if not name:
+            continue
+        if isinstance(keywords, str):
+            keywords = [keywords]
+        keywords = [k.lower() for k in keywords if isinstance(k, str) and k.strip()]
+        sectors.append({
+            "name": name,
+            "search": search or name,
+            "keywords": keywords,
+        })
+    return sectors or DEFAULT_SECTORS
+
+
+SECTOR_DEFS = load_sector_definitions()
+for sector in SECTOR_DEFS:
+    sector["keywords"] = [k.lower() for k in (sector.get("keywords") or [])]
+SECTOR_QUERIES = [s["search"] for s in SECTOR_DEFS if s.get("search")]
+if not SECTOR_QUERIES:
+    SECTOR_QUERIES = [s["search"] for s in DEFAULT_SECTORS]
 BASE_QUERY = '(expo OR "trade show" OR exhibition OR fair OR conference) "London"'
 RESULTS_PER_QUERY = 10
 
@@ -115,13 +185,10 @@ def within_window(dt):
 
 def sector_for(title):
     t = (title or "").lower()
-    if any(k in t for k in ["manufactur","engineer","aerospace","aviation","automotive","packaging"]): return "Engineering & Manufacturing"
-    if any(k in t for k in ["defence","defense","cyber","security","infosec","risk"]): return "Defence, Cyber & Security"
-    if any(k in t for k in ["energy","smart building","sustainab","net zero"]): return "Energy"
-    if any(k in t for k in ["public sector","government","nhs","education"]): return "Public Sector"
-    if any(k in t for k in ["fintech","finance","bank","payment","blockchain","crypto","defi"]): return "Fintech"
-    if any(k in t for k in ["life science","biotech","pharma","medical","dental","vet"]): return "Life Sciences"
-    if any(k in t for k in ["project management","pmo","programme","portfolio"]): return "Project Management"
+    for sector in SECTOR_DEFS:
+        keywords = sector.get("keywords") or []
+        if any(k in t for k in keywords):
+            return sector["name"]
     return None
 
 def unify(title, start_iso, end_iso, venue, url):
