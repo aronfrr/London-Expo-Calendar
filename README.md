@@ -19,9 +19,6 @@ Monday morning to:
   week.
 - **Exhibitor scraping** – Targets are configured in
   `data/exhibitors_targets.yaml`.
-- **Manual fixtures** – Add any must-have events to `data/manual_events.yaml`.
-  These seed entries are merged before Google search results so known shows
-  never disappear while their 2025 listings are still being announced.
 
 Run the scripts locally with Python 3.11+ if you need to test changes:
 
@@ -30,10 +27,5 @@ python scripts/search_google.py     # requires the Google API credentials
 python scripts/scrape_exhibitors.py
 python scripts/build_outputs.py
 ```
-
-`search_google.py` now understands structured JSON-LD, `.ics` calendar links,
-and more venue-specific queries, so pages that list multiple expos (for
-example venue event calendars) are harvested in a single run instead of being
-skipped when they lack simple date text.
 
 The workflow definition lives in `.github/workflows/weekly-discover-refresh.yml`.
