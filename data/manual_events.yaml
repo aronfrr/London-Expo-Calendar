@@ -1,0 +1,8 @@
+# Optional seed events that should always appear in events.json even if
+# Google search results are sparse. Populate with real events you want to
+# guarantee in the calendar. Example structure:
+# - title: "Example Expo"
+#   start: "2025-10-05T09:00:00+01:00"  # ISO 8601 (timezone optional)
+#   end: "2025-10-06T17:00:00+01:00"
+#   venue: "ExCeL London"
+#   url: "https://www.example.com/expo"
