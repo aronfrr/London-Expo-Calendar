@@ -5,28 +5,8 @@ CALSCALE:GREGORIAN
 METHOD:PUBLISH
 X-WR-CALNAME:London Expos (Next 3 Months)
 BEGIN:VEVENT
-UID:34e98781-20ba-4243-b765-7494b89c497e@expoapp
-DTSTAMP:20251013T130236Z
-DTSTART:20251018T090000Z
-DTEND:20251020T140000Z
-SUMMARY:New Scientist Live
-LOCATION:ExCeL London
-DESCRIPTION:New Scientist Live — https://live.newscientist.com/
-URL:https://live.newscientist.com/
-END:VEVENT
-BEGIN:VEVENT
-UID:4d00fcc0-a13f-4adf-849d-6bcfaf33aef1@expoapp
-DTSTAMP:20251013T130236Z
-DTSTART:20251014T080000Z
-DTEND:20251016T160000Z
-SUMMARY:MRO Europe — Conference & Exhibition
-LOCATION:ExCeL London
-DESCRIPTION:MRO Europe — Conference & Exhibition — https://mroeurope.aviationweek.com/en/home.html
-URL:https://mroeurope.aviationweek.com/en/home.html
-END:VEVENT
-BEGIN:VEVENT
-UID:092af5e3-eb99-4d93-bcd0-684e7609a719@expoapp
-DTSTAMP:20251013T130236Z
+UID:7094c486-e892-4fff-8d78-5934e965bc12@expoapp
+DTSTAMP:20251020T065747Z
 DTSTART:20251119T093000Z
 DTEND:20251120T170000Z
 SUMMARY:London Build Expo
@@ -35,8 +15,8 @@ DESCRIPTION:London Build Expo — https://www.londonbuildexpo.com/ (Free event)
 URL:https://www.londonbuildexpo.com/
 END:VEVENT
 BEGIN:VEVENT
-UID:0d6515e5-a4bb-4efa-80d7-662973d73f6d@expoapp
-DTSTAMP:20251013T130236Z
+UID:74a2ffc2-44af-434d-a660-337cd95f490d@expoapp
+DTSTAMP:20251020T065747Z
 DTSTART:20251119T090000Z
 DTEND:20251120T170000Z
 SUMMARY:EMEX — Energy Management & Smart Buildings
@@ -45,8 +25,8 @@ DESCRIPTION:EMEX — Energy Management & Smart Buildings — https://www.emexlon
 URL:https://www.emexlondon.com/
 END:VEVENT
 BEGIN:VEVENT
-UID:08703efb-1060-48df-8b0c-399d5c88c560@expoapp
-DTSTAMP:20251013T130236Z
+UID:e28c326f-a9f0-4abf-bb04-34140da33d12@expoapp
+DTSTAMP:20251020T065747Z
 DTSTART:20251202T093000Z
 DTEND:20251203T173000Z
 SUMMARY:FinTech Connect
